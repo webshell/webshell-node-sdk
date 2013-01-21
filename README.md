@@ -95,11 +95,11 @@ wsh.exec({
 
 ### Events
 
-The `wsh` object can send several events:
+The `wsh` object can emit several events:
 
 #### wsh.on('process', ...)
 
-When the sdk receive a view from the server.
+When the sdk receives a view from the server.
 
 #### wsh.on('success', ...)
 
