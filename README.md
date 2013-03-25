@@ -26,7 +26,7 @@ III - Hello world app
 This is a simple app using Webshell. To run this sample, you have to replace `MY_WEBSHELL_PUBLIC_KEY`, `MY_WEBSHELL_SECRET_KEY`, `MY_DOMAIN` with valid infos from the registered app.
 
 `````js
-wsh = require('wsh');
+var wsh = require('wsh');
 
 // init webshell with authentications keys
 wsh.init({
@@ -35,22 +35,8 @@ wsh.init({
 	domain:"MY_DOMAIN" // e.g: mysite.com
 });
 
-// set events
-wsh.on('error', function(err) {
-	console.log('wsh error:', err);
-});
-wsh.on('process', function(data, meta) {
-	console.log('processing', {
-		'data': data,
-		'meta': meta
-	});
-});
-wsh.on('success', function(res) {
-	console.log('succeeded, result:', res);
-});
-
 // execute webshell code
-wsh.exec({
+var wshcall = wsh.exec({
 	code: function() {
 		for (var i in args.myarr)
 			echo(args.myarr[i]);
@@ -59,6 +45,21 @@ wsh.exec({
 	},
 	args: {myarr: ["hello", "world"]}
 });
+
+// set events
+wshcall.on('error', function(err) {
+	console.log('wsh error:', err);
+});
+wshcall.on('process', function(data, meta) {
+	console.log('processing', {
+		'data': data,
+		'meta': meta
+	});
+});
+wshcall.on('success', function(res) {
+	console.log('succeeded, result:', res);
+});
+
 `````
 
 Pretty simple hm ?! You can call any other APIs on the platform in the same way. The javascript given in the `code` attribute of `wsh.exec()` is processed on our server and we retrieve all kind of data for you.
@@ -93,9 +94,11 @@ wsh.exec({
 
 *code* can be a string of the javascript, or a function with the javascript which need to be executed by Webshell.
 
+`wsh.exec` returns a WebshellCall object used to handle some events specifically to a call.
+
 ### Events
 
-The `wsh` object can emit several events:
+The `wsh` object and the WebshellCall objects can emit several events:
 
 #### wsh.on('process', ...)
 
